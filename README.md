@@ -88,12 +88,10 @@ Berikut adalah analisis komparatif antara prediksi teoritis tata letak layout da
 
 ## Screenshot Output Terminal ap16
 # 1.Ukuran Awal(Defaulut Window Size)
+![Ukuran Awal](UkuranAwal.png)
 
 # 2.Jendela Dilebarkan(Maximized / Resized Large)
+![Jendela Dilebarkan](maximized.png.jpeg)
 
 # 3.Jendela Dikecilkan(Minimized / Vertikal Scrollbar Aktif)
-
-
-
-
-![alt text](<Screenshot 2026-11-25 012258.png>)
+![Jendela Dikecilkan](Minimized.png)
