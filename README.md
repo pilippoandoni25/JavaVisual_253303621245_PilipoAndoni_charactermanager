@@ -16,14 +16,26 @@ CharacterMaager_/
 │   └── com/
 │       └── unpri/
 │           └── charactermanager/
-│               └── model/
-│                   ├── Character.java
-│                   ├── CharacterManager.java
-│                   └── CharacterType.java
-├── Bukti_Tp_3.png
-│── Bukti_Tp_6.png
+│               │── model/
+│               │   ├── Character.java
+│               │   ├── CharacterType.java
+│               │   └── CharacterManager.java
+│               └── view/
+│                   ├── AppThema.java
+│                   ├── CharacterFormPanel.java 
+│                   └── MainWindow.java 
+│              
+├── Bukti_Ap_3.png
+│── Bukti_Ap_6.png
+├── Bukti_Ap_10.png
+├── Bukti_Ap_13_sebelum.png
+├── Bukti_Ap_13_sebelum.png
+├── UkuranAwal.png
+├── maximized.png.jpeg
+├── Minimized.png
+├── sebelum.png
+├── sesudah.png
 └── README.md
-
 
 ### AP6 - Fitur Baru: Pencarian Karakter Terkuat (findStrongest)
 Rasional / Alasan Fitur Dalam pengembangan sebuah game atau sistem RPG, mengetahui entitas atau karakter mana yang memiliki statistik tertinggi (terkuat) merupakan fitur analisis data yang sangat krusial. Fitur findStrongest() ditambahkan untuk mempermudah sistem dalam menyaring karakter dengan daya serang (attackPower) paling mendominasi tanpa mengharuskan layer aplikasi melakukan pengurutan (sorting) manual di sisi luar.
@@ -34,7 +46,7 @@ Menjaga Prinsip OOP & Enkapsulasi Defensive Design: Method mengembalikan satu ob
 ![Bukti_Ap_6](Bukti_Ap_6.png)
 
 ### AP10 — Character Manager GUI dan Statistik Karakter
-Aliran Data dan Penerapan MVC Aliran data aplikasi dimulai dari Main.java, yang membuat objek Character dan menambahkan data karakter ke CharacterManager. Selanjutnya, Main.java mengambil daftar karakter melalui method getAllCharacters() dan mengirimkannya ke MainWindow untuk ditampilkan dalam antarmuka Java Swing. Dalam konsep MVC, package model bertanggung jawab terhadap data dan logika karakter, sedangkan MainWindow berperan sebagai bagian View yang menampilkan data kepada pengguna. Main.java mengatur proses inisialisasi dan menghubungkan Model dengan View, sementara statistik rata-rata level dihitung berdasarkan daftar karakter yang diterima oleh View.
+Aliran Data dan Penerapan MVC Aliran data aplikasi dimulai dari Main.java, yang membuat objek Character dan menambahkan data karakter ke CharacterManager. Main.java mengirimkan objek CharacterManager langsung ke MainWindow agar daftar yang ditampilkan selalu mengambil data terbaru dari Model. CharacterFormPanel menambahkan karakter melalui manager dan memanggil refreshList() pada MainWindow untuk memperbarui kartu, jumlah karakter, serta status. Dalam konsep MVC, package model bertanggung jawab terhadap data dan logika karakter, sedangkan MainWindow dan CharacterFormPanel berperan sebagai bagian View.
 
 Karakter Baru dan Alasan Pemilihan Tipe/Level Dua karakter baru ditambahkan untuk memenuhi kebutuhan minimal lima karakter sekaligus memberikan variasi tipe dan level pada aplikasi. Srikandi — ARCHER, Level 2: Dipilih sebagai karakter pemanah dengan level awal yang relatif rendah untuk menunjukkan variasi statistik pada karakter yang masih berkembang. Bima — WARRIOR, Level 6: Dipilih sebagai karakter petarung dengan level lebih tinggi untuk memberikan perbandingan statistik dengan karakter berlevel rendah serta membantu menguji perhitungan rata-rata level. Penambahan karakter dengan tipe dan level yang berbeda memungkinkan aplikasi menampilkan data yang lebih bervariasi dan menguji apakah statistik rata-rata level dihitung berdasarkan seluruh karakter secara akurat.
 
@@ -95,3 +107,46 @@ Berikut adalah analisis komparatif antara prediksi teoritis tata letak layout da
 
 # 3.Jendela Dikecilkan(Minimized / Vertikal Scrollbar Aktif)
 ![Jendela Dikecilkan](Minimized.png)
+
+### AP19 — Form Input Karakter dan Validasi Data
+AP19 mengembangkan aplikasi Character Manager dari GUI yang hanya menampilkan data menjadi aplikasi yang dapat menerima karakter baru melalui form. Perubahan ini membagi tanggung jawab antara Model dan View: Model menjaga aturan data, sedangkan View membaca input, memberi umpan balik, dan memperbarui tampilan.
+
+# 1.Validasi pada Model
+Konstruktor utama Character memeriksa bahwa nama tidak null atau kosong, role sudah dipilih, dan level berada pada rentang 1–99. Input yang melanggar aturan akan menghasilkan IllegalArgumentException. Pemeriksaan ini menjaga data tetap valid meskipun karakter dibuat dari jalur selain form.
+
+CharacterManager.isNameTaken(String name) memeriksa seluruh karakter untuk menemukan nama yang sama tanpa membedakan huruf besar dan kecil. Dengan demikian, nama seperti “Arjuna” dan “arjuna” dianggap duplikat.
+
+# 2.Form Tambah Karakter
+CharacterFormPanel menjadi panel input di sisi kiri jendela. Form menyediakan kolom nama, pilihan role dari CharacterType, spinner level 1–99, tombol Simpan, serta label pesan. Sebelum data dikirim ke Model, nama dibersihkan dengan trim() dan divalidasi: nama wajib diisi, panjangnya 3–20 karakter, hanya berisi huruf dan spasi, serta belum digunakan.
+
+Jika input tidak valid, form menampilkan pesan error dan menandai field terkait. Jika penyimpanan berhasil, form mengosongkan input, menampilkan pesan sukses, lalu menjalankan callback agar jendela memperbarui daftar karakter.
+
+Warna pesan diletakkan di palet tema AppThema: ERROR memakai #ff7675 dan SUCCESS memakai #55efc4. Warna terang tersebut membantu pesan tetap terbaca pada latar gelap.
+
+# 3.Pembaruan Daftar di MainWindow
+MainWindow menerima CharacterManager, bukan salinan daftar karakter, sehingga dapat menampilkan data terbaru. Method refreshList() menghapus kartu lama, membangun ulang kartu berdasarkan manager.getAllCharacters(), lalu memanggil revalidate() dan repaint() agar perubahan langsung terlihat tanpa perlu mengubah ukuran jendela. Jumlah karakter pada header dan status bar turut diperbarui.
+
+Main.java menginisialisasi delapan karakter contoh dan menyerahkan objek manager ke MainWindow. Tangkapan layar aplikasi menunjukkan form, daftar karakter, jumlah karakter, serta legenda role dalam satu jendela.
+
+## Screenshot Output (sebelum vs sesudah)
+Sebelum
+![Sebelum](Sebelum.png)
+Sesudah
+![Sesudah](Sesudah.png)
+
+
+# Identitas Mahasiswa
+# Nama: Pilippo Andoni
+# NIM : 253303621245
+
+Link Google Docs ap3 :
+
+Link Google Docs ap6 :https://docs.google.com/document/d/1XtBhCpZ2M6ZfKThiffmMxh6HUjYa0h83o8QLn2VaPIw/edit?usp=sharing
+
+Link Google Docs ap10 : https://docs.google.com/document/d/1KPFcW9OmvoW8D8x2dJxC8ljvc156gZVb3kqOzO3wFfg/edit?usp=sharing
+
+Link Google Docs ap13 : https://docs.google.com/document/d/1rzVMEQJKhlz2n5g6SvFP_UMiPqVz_wKCxktbHl3sxQQ/edit?usp=sharing
+
+Link Google Docs ap16 : https://docs.google.com/document/d/12bKf7pF8VRwrgaqjQWKk1x7Nl_pxeGIPi5Kh5-NhoYw/edit?usp=sharing
+
+Link Google Docs ap19 :https://docs.google.com/document/d/1c8r8SYKbrVPFk_uR8S3rvvVw3b9vn4kSx6bhH8ipO0c/edit?usp=sharing
