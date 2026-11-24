@@ -20,12 +20,12 @@ public class Main {
             new Character("Athena", CharacterType.ARCHER, 4)
         );
 
-        // 2 karakter baru
+        // Menambahkan variasi level agar perbedaan visual terlihat jelas
         manager.addCharacter(
-            new Character("Srikandi", CharacterType.ARCHER, 2)
+            new Character("Gatotkaca", CharacterType.WARRIOR, 7)
         );
         manager.addCharacter(
-            new Character("Jerr", CharacterType.WARRIOR, 6)
+            new Character("Morgana", CharacterType.MAGE, 1)
         );
 
         // Menjalankan GUI pada Event Dispatch Thread
