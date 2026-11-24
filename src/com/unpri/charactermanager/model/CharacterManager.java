@@ -21,7 +21,7 @@ public class CharacterManager {
      * @return true jika berhasil ditambahkan, false jika ditolak karena duplikat
      */
     public boolean addCharacter(Character character) {
-        if (findByName(character.getName()) != null) {
+        if (isNameTaken(character.getName())) {
             System.out.println("❌ Gagal: karakter dengan nama '" + character.getName() + "' sudah ada!");
             return false;
         }
@@ -74,6 +74,16 @@ public class CharacterManager {
             }
         }
         return matches;
+    }
+
+    /** Mengembalikan true jika sudah ada karakter bernama sama (tanpa membedakan huruf besar/kecil). */
+    public boolean isNameTaken(String name) {
+        for (Character c : getAllCharacters()) {
+            if (c.getName().equalsIgnoreCase(name)) {
+                return true;
+            }
+        }
+        return false;
     }
 
     public ArrayList<Character> getAllCharacters() {

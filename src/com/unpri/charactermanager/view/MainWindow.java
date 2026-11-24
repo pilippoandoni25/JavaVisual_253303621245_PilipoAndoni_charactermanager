@@ -5,7 +5,6 @@ import java.awt.Cursor;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.GridLayout;
-import java.util.ArrayList;
 import javax.swing.Box;
 import javax.swing.BoxLayout;
 import javax.swing.BorderFactory;
@@ -14,20 +13,24 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import com.unpri.charactermanager.model.Character;
+import com.unpri.charactermanager.model.CharacterManager;
 import com.unpri.charactermanager.model.CharacterType;
 
 public class MainWindow extends JFrame {
 
-    private ArrayList<Character> characterList;
+    private final CharacterManager manager;
+    private JPanel cardsPanel;
+    private JLabel countLabel;
+    private JLabel statusLabel;
 
-    public MainWindow(ArrayList<Character> characterList) {
-        super("Character Manager v0.5");
-        this.characterList = characterList;
+    public MainWindow(CharacterManager manager) {
+        super("Character Manager v0.6");
+        this.manager = manager;
 
         initComponents();
 
         pack();
-        setMinimumSize(new Dimension(560, 380));
+        setMinimumSize(new Dimension(820, 420));
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLocationRelativeTo(null);
     }
@@ -37,9 +40,26 @@ public class MainWindow extends JFrame {
         setLayout(new BorderLayout());
 
         add(createHeaderPanel(), BorderLayout.NORTH);
+        add(new CharacterFormPanel(manager, this::refreshList), BorderLayout.WEST);
         add(createListArea(), BorderLayout.CENTER);
         add(createLegendPanel(), BorderLayout.EAST);
         add(createStatusPanel(), BorderLayout.SOUTH);
+
+        refreshList();
+    }
+
+    /** Membangun ulang kartu dari data Model dan memperbarui semua penghitung. */
+    private void refreshList() {
+        cardsPanel.removeAll();
+        for (Character c : manager.getAllCharacters()) {
+            cardsPanel.add(createCharacterLabel(c));
+        }
+        cardsPanel.revalidate();
+        cardsPanel.repaint();
+
+        int total = manager.getTotalCharacters();
+        countLabel.setText(total + " karakter");
+        statusLabel.setText("Total: " + total + " karakter  |  Siap");
     }
 
     /** NORTH: judul di kiri, jumlah karakter di kanan. */
@@ -52,32 +72,29 @@ public class MainWindow extends JFrame {
         title.setFont(AppTheme.FONT_TITLE);
         title.setForeground(AppTheme.TEXT_MAIN);
 
-        JLabel count = new JLabel(characterList.size() + " karakter");
-        count.setFont(AppTheme.FONT_BODY);
-        count.setForeground(AppTheme.GOLD);
+        countLabel = new JLabel(" ");
+        countLabel.setFont(AppTheme.FONT_BODY);
+        countLabel.setForeground(AppTheme.GOLD);
 
         header.add(title, BorderLayout.WEST);
-        header.add(count, BorderLayout.EAST);
+        header.add(countLabel, BorderLayout.EAST);
         return header;
     }
 
     /** CENTER: kartu karakter di dalam JScrollPane. */
     private JScrollPane createListArea() {
-        JPanel cards = new JPanel(new GridLayout(0, 1, 0, 8));
-        cards.setBackground(AppTheme.BG_MAIN);
-        for (Character c : characterList) {
-            cards.add(createCharacterLabel(c));
-        }
+        cardsPanel = new JPanel(new GridLayout(0, 1, 0, 8));
+        cardsPanel.setBackground(AppTheme.BG_MAIN);
 
         JPanel holder = new JPanel(new BorderLayout());
         holder.setBackground(AppTheme.BG_MAIN);
-        holder.setBorder(BorderFactory.createEmptyBorder(8, 16, 8, 8));
-        holder.add(cards, BorderLayout.NORTH);
+        holder.setBorder(BorderFactory.createEmptyBorder(8, 8, 8, 8));
+        holder.add(cardsPanel, BorderLayout.NORTH);
 
         JScrollPane scroll = new JScrollPane(holder);
         scroll.setBorder(null);
         scroll.getViewport().setBackground(AppTheme.BG_MAIN);
-        scroll.setPreferredSize(new Dimension(460, 280));
+        scroll.setPreferredSize(new Dimension(420, 280));
         return scroll;
     }
 
@@ -132,10 +149,10 @@ public class MainWindow extends JFrame {
         JPanel status = new JPanel(new FlowLayout(FlowLayout.LEFT, 16, 6));
         status.setBackground(AppTheme.BG_STATUS);
 
-        JLabel lbl = new JLabel("Total: " + characterList.size() + " karakter  |  Siap");
-        lbl.setFont(AppTheme.FONT_MONO);
-        lbl.setForeground(AppTheme.TEXT_MUTED);
-        status.add(lbl);
+        statusLabel = new JLabel(" ");
+        statusLabel.setFont(AppTheme.FONT_MONO);
+        statusLabel.setForeground(AppTheme.TEXT_MUTED);
+        status.add(statusLabel);
         return status;
     }
 }

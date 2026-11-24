@@ -19,6 +19,15 @@ public class Character {
     // ===== CONSTRUCTOR 1: untuk membuat karakter BARU =====
     // Dipakai saat user membuat karakter dari form (belum punya id dari database)
     public Character(String name, CharacterType type, int level) {
+        if (name == null || name.isBlank()) {
+            throw new IllegalArgumentException("Nama tidak boleh kosong");
+        }
+        if (type == null) {
+            throw new IllegalArgumentException("Role wajib dipilih");
+        }
+        if (level < 1 || level > 99) {
+            throw new IllegalArgumentException("Level harus 1-99");
+        }
         this.name = name;              // "this" merujuk ke atribut milik object ini
         this.type = type;
         this.level = level;
@@ -72,8 +81,8 @@ public class Character {
     }
 
     public void setLevel(int level) {
-        if (level < 1) {                       // validasi: level tidak boleh kurang dari 1
-            throw new IllegalArgumentException("Level minimal adalah 1");
+        if (level < 1 || level > 99) {        // validasi: level harus berada dalam rentang 1-99
+            throw new IllegalArgumentException("Level harus 1-99");
         }
         this.level = level;
         this.hitPoints = calculateBaseHP();      // statistik dihitung ULANG setiap level berubah

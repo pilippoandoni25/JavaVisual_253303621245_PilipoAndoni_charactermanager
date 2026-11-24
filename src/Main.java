@@ -22,7 +22,7 @@ public class Main {
         // Menjalankan GUI pada Event Dispatch Thread
         SwingUtilities.invokeLater(() -> {
             MainWindow window =
-                new MainWindow(manager.getAllCharacters());
+                new MainWindow(manager);
             window.setVisible(true);
         });
     }

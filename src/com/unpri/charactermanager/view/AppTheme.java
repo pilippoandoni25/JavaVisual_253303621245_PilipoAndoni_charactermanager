@@ -19,6 +19,8 @@ public final class AppTheme {
     public static final Color TEXT_LIGHT = Color.WHITE;             // teks di atas kartu berwarna
     public static final Color TEXT_MUTED = Color.decode("#a0a0b0"); // teks sekunder
     public static final Color GOLD       = Color.decode("#fdcb6e"); // aksen untuk karakter level tinggi
+    public static final Color ERROR      = Color.decode("#ff7675"); // merah terang: terbaca di latar gelap
+    public static final Color SUCCESS    = Color.decode("#55efc4"); // hijau terang untuk pesan berhasil
 
     // ---------- Font ----------
     public static final Font FONT_TITLE = new Font("SansSerif", Font.BOLD, 22);   // judul layar
