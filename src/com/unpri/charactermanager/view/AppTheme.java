@@ -14,8 +14,10 @@ public final class AppTheme {
 
     // ---------- Palet warna ----------
     public static final Color BG_MAIN    = Color.decode("#13131f"); // latar jendela: hampir hitam
+    public static final Color BG_STATUS  = Color.decode("#1e1e2e"); // latar bar status
     public static final Color TEXT_MAIN  = Color.decode("#dfe6e9"); // teks utama: abu terang
     public static final Color TEXT_LIGHT = Color.WHITE;             // teks di atas kartu berwarna
+    public static final Color TEXT_MUTED = Color.decode("#a0a0b0"); // teks sekunder
     public static final Color GOLD       = Color.decode("#fdcb6e"); // aksen untuk karakter level tinggi
 
     // ---------- Font ----------
